@@ -3,21 +3,23 @@
 
 int main()
 {
-    int qtd_paginas, paginas[10000], temp[10000];
-    int qtd_quadros, quadro[10000];
+    int qtd_paginas, paginas, *vetor, temp[10000];
+    int qtd_quadros, *quadro;
     int flag1, flag2, flag3; 
-    int i = 0, j = 0, k = 0, pos, max, pf = 0;
+    int i, j, k, pos, max, pf = 0;
 
     
     scanf("%d", &qtd_quadros);
     scanf("%d", &qtd_paginas);
     
+    vetor = malloc(qtd_paginas * sizeof(int));
     
-    for(i = 0; i < qtd_paginas; ++i){
-        scanf("%d", &paginas[i]);
+    for(i = 0; i < qtd_paginas; i++){
+        scanf("%d", &vetor[i]);
     }
     
-    for(i = 0; i < qtd_quadros; ++i){
+    quadro = (int *)malloc(qtd_quadros *sizeof(int));
+    for(i = 0; i < qtd_quadros; i++){
         quadro[i] = -1;
     }
     
@@ -26,7 +28,7 @@ int main()
         
         for(j = 0; j < qtd_quadros; ++j)
         {
-            if(quadro[j] == paginas[i])
+            if(quadro[j] == vetor[i])
             {
                    flag1 = flag2 = 1;
                    break;
@@ -40,7 +42,7 @@ int main()
                 if(quadro[j] == -1)
                 {
                     pf++;
-                    quadro[j] = paginas[i];
+                    quadro[j] = vetor[i];
                     flag2 = 1;
                     break;
                 }
@@ -57,7 +59,7 @@ int main()
             
             for(k = i + 1; k < qtd_paginas; ++k)
             {
-                if(quadro[j] == paginas[k])
+                if(quadro[j] == vetor[k])
                 {
                     temp[j] = k;
                     break;

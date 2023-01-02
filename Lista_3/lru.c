@@ -1,83 +1,88 @@
-#include<stdio.h>
-    
+#include <stdio.h>
+#include <stdlib.h> 
+
+int acharLRU(int time[], int n)
+{
+   int i, minimum = time[0], pos = 0;
+ 
+   for (i = 1; i < n; ++i)
+   {
+      if (time[i] < minimum)
+      {
+         minimum = time[i];
+         pos = i;
+      }
+   }
+ 
+   return pos;
+}
+ 
+
 int main()
 {
-    int i = 0, j = 0, pos, k, l;
-    int a = 0, b = 0, pf = 0;
-    int qtd_quadros, quadros[10000];
-    int temp[10000];
-    int qtd_paginas, paginas[10000];
+   int qtd_quadros, qtd_paginas; 
+   int *quadros, *paginas, counter = 0, time[10000]; 
+   int flag1, flag2, i, j, pos, pf = 0;
 
+   scanf("%d", &qtd_quadros);
+   scanf("%d", &qtd_paginas);
 
-    scanf("%d", &qtd_quadros);
-    scanf("%d", &qtd_paginas);
-
-    for(i = 0; i < qtd_paginas; ++i){
-        scanf("%d", &paginas[i]);
-    }
-
-    for(i = 0; i < qtd_quadros; ++i){
-            quadros[i] = -1;
-    }
-    
-    for(j = 0; j < qtd_paginas; j++)
-    {
-            a = 0, b = 0;
-
-            for(i = 0; i < qtd_quadros; i++)
+   paginas = malloc(qtd_paginas * sizeof(int));
+ 
+   for (i = 0; i < qtd_paginas; ++i)
+   {
+      scanf("%d", &paginas[i]);
+   }
+ 
+   quadros = (int *)malloc(qtd_quadros * sizeof(int));
+   for (i = 0; i < qtd_quadros; ++i)
+   {
+      quadros[i] = -1;
+   }
+ 
+   for (i = 0; i < qtd_paginas; ++i)
+   {
+      flag1 = 0;
+      flag2 = 0;
+ 
+      for (j = 0; j < qtd_quadros; ++j)
+      {
+         if (quadros[j] == paginas[i])
+         {
+            counter++;
+            time[j] = counter;
+            flag1 = flag2 = 1;
+            break;
+         }
+      }
+ 
+      if (flag1 == 0)
+      {
+         for (j = 0; j < qtd_quadros; ++j)
+         {
+            if (quadros[j] == -1)
             {
-                if(quadros[i] == paginas[j])
-                {
-                        a = 1;
-                        b = 1;
-                        break;
-                }
+               counter++;
+               pf++;
+               quadros[j] = paginas[i];
+               time[j] = counter;
+               flag2 = 1;
+               break;
             }
-
-            if(a == 0)
-            {
-                for(i = 0; i < qtd_quadros; i++)
-                {
-                    if(quadros[i] == -1)
-                    {
-                        quadros[i] = paginas[j];
-                        b = 1;
-                        pf++;
-                        break;
-                    }
-                }
-            }
-
-            if(b == 0)
-            {
-                for(i = 0; i < qtd_quadros; i++)
-                {
-                    temp[i] = 0;
-                }
-
-                for(k = j - 1, l = 1; l <= qtd_quadros - 1; l++, k--)
-                {
-                    for(i = 0; i < qtd_quadros; i++)
-                    {
-                        if(quadros[i] == paginas[k])
-                        {
-                            temp[i] = 1;
-                        }
-                    }
-                }
-
-                for(i = 0; i < qtd_quadros; i++)
-                {
-                    if(temp[i] == 0)
-                        pos = i;
-                }
-
-                quadros[pos] = paginas[j];
-                pf++;
-            }
-    }
-
-    printf("%d\n", pf);
-    
-    return 0;
+         }
+      }
+ 
+      if (flag2 == 0)
+      {
+         pos = acharLRU(time, qtd_quadros);
+         counter++;
+         pf++;
+         quadros[pos] = paginas[i];
+         time[pos] = counter;
+      }
+   }
+ 
+   printf("%d\n", pf);
+ 
+   return 0;
 }
